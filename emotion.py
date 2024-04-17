@@ -3,8 +3,6 @@ from decouple import config
 import chainlit as cl
 import time
 
-
-
 def chat_new_message(self, message, sender):
     cl.run_sync(
         cl.Message(
@@ -88,9 +86,13 @@ def start_chat_simulation(emotion1, emotion2, combined_emotion, airbnb_topic, ma
         system_message="I am the Airbnb virtual assistant, here to help guests with their stays. My role is to provide helpful, empathetic, and constructive responses to guest inquiries and concerns, while maintaining a friendly and professional tone that aligns with Airbnb's brand voice. I have a deep understanding of Airbnb's policies, services, and best practices, which allows me to offer accurate and relevant information to guests. When interacting with guests, I prioritize active listening, understanding their unique needs, and providing personalized recommendations and solutions. I aim to create a positive and welcoming experience for all guests, ensuring they feel supported and valued throughout their Airbnb journey. Whether it's answering questions about booking procedures, offering tips for a smooth check-in, or addressing any issues that may arise during a stay, I'm committed to going above and beyond to exceed guest expectations and promote Airbnb's commitment to exceptional hospitality.",
         llm_config=llm_config
     )
-
-    #agents = [user_proxy, emotion_agents[emotion1], emotion_agents[emotion2], airbnb_assistant]
     agents = [emotion_agents[emotion1], emotion_agents[emotion2], airbnb_assistant]
+
+        # Check if emotion1 and emotion2 are different, and add the corresponding agents
+    if emotion1 != emotion2:
+        agents = [emotion_agents[emotion1], emotion_agents[emotion2], airbnb_assistant]
+    else:
+        agents = [emotion_agents[emotion1], airbnb_assistant]
 
     group_chat = GroupChat(agents=agents, messages=[])
     manager = GroupChatManager(groupchat=group_chat, llm_config=llm_config)
@@ -119,21 +121,21 @@ emotional_overlaps = [
 ]
 
 airbnb_topics = [
-    "finding a cozy mountain cabin",
-    "navigating a refund for a cancellation",
-    "dealing with unexpected guests",
-    "booking a beach house for a large group",
-    "securing a pet-friendly accommodation",
-    "planning a surprise honeymoon stay",
-    "finding sustainable living options",
-    "choosing a city apartment with a view",
-    "accessing amenities for a luxury stay",
-    "exploring cultural experiences offered",
-    "solving issues with a host",
-    "locating a quiet retreat for meditation",
-    "handling poor cleanliness standards",
-    "seeking adventure activities nearby",
-    "ensuring safety measures in a new city"
+"celebrating a milestone birthday with friends",
+"planning a surprise honeymoon stay",
+"exploring cultural experiences offered",
+"choosing a city apartment with a view",
+"handling a dispute with a neighbor",
+"coping with a last-minute cancellation",
+"managing expectations for a rural getaway",
+"dealing with a power outage during the stay",
+"responding to an insensitive comment from a host",
+"adapting to unfamiliar house rules",
+"addressing accessibility concerns",
+"solving issues with an unresponsive host",
+"ensuring safety measures in a remote location",
+"handling a confrontation with another guest",
+"dealing with excessive noise from neighboring unit"
 ]
 
 if __name__ == "__main__":
