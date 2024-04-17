@@ -94,7 +94,8 @@ def start_chat_simulation(emotion1, emotion2, combined_emotion, airbnb_topic, ma
     else:
         agents = [emotion_agents[emotion1], airbnb_assistant]
 
-    group_chat = GroupChat(agents=agents, messages=[])
+    # Consider setting speaker_selection_method to 'round_robin' or allow_repeat_speaker to False
+    group_chat = GroupChat(agents=agents, speaker_selection_method='round_robin', allow_repeat_speaker=False, messages=[])
     manager = GroupChatManager(groupchat=group_chat, llm_config=llm_config)
 
     # Initiating chat with a message constructed from the emotions and topic
